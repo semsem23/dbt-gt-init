@@ -1,0 +1,11 @@
+version: 2
+
+seeds:
+  - name: order_status_descriptions
+    description: "Lookup mapping raw order status codes to readable descriptions."
+    columns:
+      - name: status
+        description: "Primary key — raw status from jaffle_shop.orders."
+        data_tests:
+          - unique
+          - not_null

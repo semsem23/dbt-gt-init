@@ -43,3 +43,16 @@ models:
       
     marts:
       +materialized: table
+      
+# Configuring seeds
+# Full documentation: https://docs.getdbt.com/reference/seed-configs
+# Seeds are CSV files in the `seeds/` directory, loaded into the warehouse
+# with `dbt seed`. Setting +column_types makes the loaded schema explicit
+# instead of letting dbt infer it from the CSV contents.
+seeds:
+  dbt_fundamentals_on_demand:
+    order_status_descriptions:
+      +column_types:
+        status: string
+        status_description: string
+        is_completed: boolean
