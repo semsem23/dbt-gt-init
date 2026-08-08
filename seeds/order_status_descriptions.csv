@@ -1,0 +1,6 @@
+status,status_description,is_completed
+placed,Order placed but not yet shipped,false
+shipped,Order shipped to customer,false
+completed,Order delivered and completed,true
+return_pending,Return requested by customer,false
+returned,Order returned by customer,false
