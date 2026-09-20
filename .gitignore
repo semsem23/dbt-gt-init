@@ -2,4 +2,21 @@
 # these are the default directory names, adjust/add to fit your needs
 target/
 dbt_packages/
+dbt_modules/
 logs/
+
+# local credentials / secrets — never commit real keys
+# (ci/profiles.yml is intentionally tracked — it has no real credentials,
+# CI writes its keyfile at runtime from a repo secret)
+/profiles.yml
+.env
+*.env
+*keyfile*.json
+*service-account*.json
+
+# editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+dbt_internal_packages/

@@ -1,0 +1,16 @@
+version: 2
+
+exposures:
+  - name: executive_revenue_dashboard
+    label: Executive Revenue Dashboard
+    type: dashboard
+    maturity: medium
+    description: >
+      Leadership-facing dashboard tracking order volume, revenue, and customer
+      lifetime value, built on top of the finance and marketing marts.
+    depends_on:
+      - ref('fct_orders')
+      - ref('dim_customers')
+    owner:
+      name: Sami Nouari
+      email: sami.nouari@gmail.com

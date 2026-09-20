@@ -1,0 +1,13 @@
+version: 2
+
+snapshots:
+  - name: orders_snapshot
+    description: >
+      Type-2 snapshot of raw order status over time, using the `check` strategy
+      on the `status` column. Enables point-in-time analysis of how long orders
+      spend in each status — normally by MERGE-ing changes in on every run.
+      This GCP project runs in BigQuery Sandbox mode (no billing account),
+      which blocks that MERGE, so `dbt snapshot` must be run with
+      `--full-refresh` for now. That drops and recreates the snapshot table
+      each time instead of appending changes, so no history actually
+      accumulates across runs until billing is enabled — see README.md.

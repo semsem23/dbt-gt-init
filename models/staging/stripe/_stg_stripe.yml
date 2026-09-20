@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: stg_stripe__payment
+    description: One row per Stripe payment attempt, with amounts converted from cents to dollars.
+    columns:
+      - name: payment_id
+        description: Primary key — unique identifier for the payment.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: order_id
+        description: Foreign key to the order this payment was made against.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_jaffle_shop__orders')
+                field: order_id
+
+      - name: payment_method
+        description: "The method used to make the payment, e.g. credit_card, coupon, bank_transfer, gift_card."
+
+      - name: payment_status
+        description: "{{ doc('payment_status') }}"
+        data_tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - success
+                  - fail
+
+      - name: payment_amount
+        description: >
+          The payment amount in dollars, converted from Stripe's cents representation
+          via the `cents_to_dollars` macro.
+        data_tests:
+          - not_null
+
+      - name: payment_created
+        description: Timestamp the payment was created.

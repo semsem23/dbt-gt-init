@@ -1,0 +1,19 @@
+# Used only in GitHub Actions (DBT_PROFILES_DIR=./ci). The keyfile is
+# written at runtime from the BIGQUERY_KEYFILE_JSON repo secret and is
+# git-ignored — see .github/workflows/dbt_ci.yml.
+#
+# `project` is the service account's own GCP project (where dbt creates
+# output datasets and BigQuery bills the job) — NOT dbt-tutorial, which is
+# only where the source tables live (see database: in the source YAML).
+default:
+  target: ci
+  outputs:
+    ci:
+      type: bigquery
+      method: service-account
+      keyfile: ci/bigquery-keyfile.json
+      project: wide-isotope-409918
+      dataset: dbt_ci
+      threads: 4
+      location: US
+      timeout_seconds: 300

@@ -1,0 +1,65 @@
+name: dbt CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+env:
+  DBT_PROFILES_DIR: ./ci
+
+jobs:
+  # Runs on every push/PR, no secrets required: dbt parse doesn't open a
+  # warehouse connection, so it catches broken refs/sources, invalid YAML,
+  # and Jinja errors for free.
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install dbt packages
+        run: dbt deps
+
+      - name: dbt parse
+        run: dbt parse
+
+  # sqlfluff's dbt templater needs a real warehouse connection (it builds a
+  # relations cache), and dbt build obviously needs one too — so both only
+  # run once you've added the BIGQUERY_KEYFILE_JSON secret and flipped the
+  # BIGQUERY_CI_ENABLED repo variable to "true".
+  lint_and_build:
+    runs-on: ubuntu-latest
+    needs: checks
+    if: ${{ vars.BIGQUERY_CI_ENABLED == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install dbt packages
+        run: dbt deps
+
+      - name: Write BigQuery service account keyfile
+        run: echo '${{ secrets.BIGQUERY_KEYFILE_JSON }}' > ci/bigquery-keyfile.json
+
+      - name: SQL lint
+        run: sqlfluff lint models
+
+      - name: Reset snapshot (BigQuery Sandbox has no billing, so MERGE is blocked)
+        run: dbt run-operation reset_snapshot
+
+      - name: dbt build
+        run: dbt build

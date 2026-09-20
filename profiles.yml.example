@@ -1,0 +1,24 @@
+# Copy this to ~/.dbt/profiles.yml (or set DBT_PROFILES_DIR to a folder
+# containing it).
+#
+# `project` must be YOUR OWN GCP project, not `dbt-tutorial` — dbt creates
+# its output datasets (staging/marts/seeds/snapshots) there, and BigQuery
+# bills/quotas jobs against it. The source tables still read from the
+# public dbt-tutorial project via `database:` in the source YAML files;
+# BigQuery allows cross-project queries, so this works even though `project`
+# here points elsewhere.
+#
+# Local/interactive auth uses your Google user credentials via
+# `gcloud auth application-default login`. CI uses a service account
+# instead — see ci/profiles.yml.
+default:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: <your_gcp_project_id>
+      dataset: dbt_<your_name>
+      threads: 4
+      location: US
+      timeout_seconds: 300

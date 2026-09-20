@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: One row per customer, with lifetime order and revenue aggregates.
+    columns:
+      - name: customer_id
+        description: Primary key — unique identifier for the customer.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: first_name
+        description: Customer's first name.
+
+      - name: last_name
+        description: Customer's last name.
+
+      - name: first_order_date
+        description: Date of the customer's first order. Null if the customer has never ordered.
+
+      - name: most_recent_order_date
+        description: Date of the customer's most recent order. Null if the customer has never ordered.
+
+      - name: number_of_orders
+        description: Total number of orders placed by the customer. Zero if none.
+        data_tests:
+          - not_null
+
+      - name: lifetime_value
+        description: Sum of successful payment amounts across all the customer's orders, in dollars.

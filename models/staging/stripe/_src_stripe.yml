@@ -1,6 +1,16 @@
+version: 2
+
 sources:
-  - name: stripe          
+  - name: stripe
+    description: Raw Stripe payment data, replicated into the warehouse from the Stripe API.
     database: dbt-tutorial
-    schema: stripe        
+    schema: stripe
     tables:
-      - name: payment     
+      - name: payment
+        description: Raw payment attempts, one row per attempt. Amounts are stored in cents.
+        columns:
+          - name: id
+            description: Primary key
+            data_tests:
+              - unique
+              - not_null

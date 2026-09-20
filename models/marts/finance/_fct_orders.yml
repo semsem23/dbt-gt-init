@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: >
+      One row per order, with the total successfully captured Stripe payment amount.
+      Materialized as a full table rebuild on every run (not incremental) — this GCP
+      project runs in BigQuery Sandbox mode (no billing account), which blocks the
+      MERGE-based upserts an incremental materialization needs.
+    columns:
+      - name: order_id
+        description: Primary key — unique identifier for the order.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: customer_id
+        description: Foreign key to the customer who placed the order.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_jaffle_shop__customers')
+                field: customer_id
+
+      - name: order_date
+        description: The date the order was placed.
+        data_tests:
+          - not_null
+
+      - name: amount
+        description: >
+          Total amount of successful (payment_status = 'success') payments for the order,
+          in dollars. Zero when the order has no successful payment yet.
+        data_tests:
+          - not_null
