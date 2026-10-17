@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: dim_locations
+    description: One row per store location.
+    columns:
+      - name: location_id
+        description: Primary key — unique identifier for the location.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: location_name
+        description: City the location is in.
+
+      - name: tax_rate
+        description: Sales tax rate applied at this location.
+        data_tests:
+          - not_null
+
+      - name: opened_at
+        description: When the location opened.

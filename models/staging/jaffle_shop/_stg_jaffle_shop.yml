@@ -32,3 +32,61 @@ models:
               arguments:
                 to: ref('stg_jaffle_shop__customers')
                 field: customer_id
+  - name: stg_jaffle_shop__order_items
+    description: one order line item per row
+    columns:
+      - name: order_item_id
+        description: the primary key
+        data_tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: the order this item belongs to (UUID, not the integer order_id of stg_jaffle_shop__orders)
+      - name: product_id
+        description: the product sku sold
+
+  - name: stg_jaffle_shop__products
+    description: one product per row
+    columns:
+      - name: product_id
+        description: the primary key (product sku)
+        data_tests:
+          - unique
+          - not_null
+      - name: product_name
+      - name: product_type
+        description: jaffle or beverage
+      - name: product_description
+      - name: product_price
+        description: unit price in dollars
+
+  - name: stg_jaffle_shop__locations
+    description: one store location per row
+    columns:
+      - name: location_id
+        description: the primary key
+        data_tests:
+          - unique
+          - not_null
+      - name: location_name
+      - name: tax_rate
+        description: sales tax rate applied at this location
+      - name: opened_at
+        description: when the location opened
+
+  - name: stg_jaffle_shop__supplies
+    description: one supply per product per row (a supply used by several products appears once per product)
+    columns:
+      - name: supply_key
+        description: the primary key, a surrogate key on supply_id + product_id
+        data_tests:
+          - unique
+          - not_null
+      - name: supply_id
+        description: the supply id, not unique on its own
+      - name: product_id
+        description: the product sku this supply is used for
+      - name: supply_name
+      - name: supply_cost
+        description: cost of the supply in dollars
+      - name: is_perishable

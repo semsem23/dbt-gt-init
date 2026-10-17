@@ -10,3 +10,8 @@ groups:
     owner:
       name: Sami Nouari
       email: sami.nouari@gmail.com
+
+  - name: operations
+    owner:
+      name: Sami Nouari
+      email: sami.nouari@gmail.com

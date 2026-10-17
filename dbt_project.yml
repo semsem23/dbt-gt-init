@@ -37,6 +37,8 @@ models:
         +group: finance
       marketing:
         +group: marketing
+      operations:
+        +group: operations
 
 # Seeds are CSV files in the `seeds/` directory, loaded into the warehouse
 # with `dbt seed`. Setting +column_types makes the loaded schema explicit

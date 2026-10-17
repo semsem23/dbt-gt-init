@@ -28,3 +28,45 @@ sources:
               count: 1
               period: day
           loaded_at_field: _etl_loaded_at
+  # Tables from the newer dbt-labs/jaffle-shop dataset, which dbt-tutorial
+  # doesn't publish. Loaded once with `bq load` from the repo's
+  # seeds/jaffle-data/raw_*.csv into our own project (location US).
+  # Their ids are UUIDs, so they don't join to the integer ids in
+  # jaffle_shop.orders above.
+  - name: jaffle_shop_raw
+    description: Raw Jaffle Shop items, products, stores and supplies, loaded from the dbt-labs/jaffle-shop CSVs
+    database: "{{ target.project }}"
+    schema: jaffle_shop_raw
+    tables:
+      - name: order_items
+        description: Raw order line items, one row per item sold
+        columns:
+          - name: id
+            description: primary key
+            data_tests:
+              - unique
+              - not_null
+      - name: products
+        description: Raw product catalog. Prices are stored in cents.
+        columns:
+          - name: sku
+            description: primary key
+            data_tests:
+              - unique
+              - not_null
+      - name: stores
+        description: Raw store locations
+        columns:
+          - name: id
+            description: primary key
+            data_tests:
+              - unique
+              - not_null
+      - name: supplies
+        description: Raw supplies used per product. Costs are stored in cents. A supply id repeats once per product (sku) that uses it.
+        data_tests:
+          - dbt_utils.unique_combination_of_columns:
+              arguments:
+                combination_of_columns:
+                  - id
+                  - sku
