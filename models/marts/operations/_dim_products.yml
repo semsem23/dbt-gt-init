@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: dim_products
+    description: One row per product, with the per-unit supply cost and gross margin.
+    columns:
+      - name: product_id
+        description: Primary key — the product sku.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: product_name
+        description: Product name.
+
+      - name: product_type
+        description: Product category.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - jaffle
+                  - beverage
+
+      - name: product_description
+        description: Product description.
+
+      - name: product_price
+        description: Unit selling price, in dollars.
+        data_tests:
+          - not_null
+
+      - name: number_of_supplies
+        description: Number of supplies used to make one unit of the product. Zero if none.
+        data_tests:
+          - not_null
+
+      - name: supply_cost
+        description: Sum of the costs of the supplies used to make one unit, in dollars. Zero if none.
+        data_tests:
+          - not_null
+
+      - name: gross_margin
+        description: product_price minus supply_cost, in dollars, per unit.
+        data_tests:
+          - not_null
+
+      - name: has_perishable_supplies
+        description: True if at least one of the product's supplies is perishable.
+        data_tests:
+          - not_null

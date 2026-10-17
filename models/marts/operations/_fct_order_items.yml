@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: fct_order_items
+    description: >
+      One row per item sold, with its price, supply cost and gross margin.
+      order_id is a UUID from the newer Jaffle Shop dataset: it does not join to
+      fct_orders, whose order_id comes from the classic integer-keyed orders.
+    columns:
+      - name: order_item_id
+        description: Primary key — unique identifier for the order item.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: order_id
+        description: The order this item belongs to.
+        data_tests:
+          - not_null
+
+      - name: product_id
+        description: Foreign key to the product sold.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_products')
+                field: product_id
+
+      - name: product_type
+        description: Product category (jaffle or beverage).
+
+      - name: product_price
+        description: Price the item sold for, in dollars.
+
+      - name: supply_cost
+        description: Supply cost of the item, in dollars.
+
+      - name: gross_margin
+        description: product_price minus supply_cost, in dollars.
