@@ -3,9 +3,10 @@ version: 2
 models:
   - name: fct_order_items
     description: >
-      One row per item sold, with its price, supply cost and gross margin.
-      order_id is a UUID from the newer Jaffle Shop dataset: it does not join to
-      fct_orders, whose order_id comes from the classic integer-keyed orders.
+      One row per item sold, with its price, supply cost, gross margin and
+      the location it was sold at. order_id is a UUID from the newer Jaffle
+      Shop dataset: it does not join to fct_orders, whose order_id comes from
+      the classic integer-keyed orders.
     columns:
       - name: order_item_id
         description: Primary key — unique identifier for the order item.
@@ -17,6 +18,15 @@ models:
         description: The order this item belongs to.
         data_tests:
           - not_null
+
+      - name: location_id
+        description: Foreign key to the location the order was placed at.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_locations')
+                field: location_id
 
       - name: product_id
         description: Foreign key to the product sold.

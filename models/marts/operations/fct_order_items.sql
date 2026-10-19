@@ -10,6 +10,7 @@ final as (
     select
         order_items.order_item_id,
         order_items.order_id,
+        order_items.location_id,
         order_items.product_id,
         products.product_type,
         products.product_price,

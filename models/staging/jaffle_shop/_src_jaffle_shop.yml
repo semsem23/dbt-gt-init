@@ -32,12 +32,23 @@ sources:
   # doesn't publish. Loaded once with `bq load` from the repo's
   # seeds/jaffle-data/raw_*.csv into our own project (location US).
   # Their ids are UUIDs, so they don't join to the integer ids in
-  # jaffle_shop.orders above.
+  # jaffle_shop.orders above. `orders` was added here (rather than reusing
+  # jaffle_shop.orders) specifically because it carries store_id, letting
+  # order_items join through to stores/locations — something the classic
+  # tutorial source can't do.
   - name: jaffle_shop_raw
-    description: Raw Jaffle Shop items, products, stores and supplies, loaded from the dbt-labs/jaffle-shop CSVs
+    description: Raw Jaffle Shop orders, items, products, stores and supplies, loaded from the dbt-labs/jaffle-shop CSVs
     database: "{{ target.project }}"
     schema: jaffle_shop_raw
     tables:
+      - name: orders
+        description: Raw orders, one row per order. Has no status field (unlike jaffle_shop.orders) but does carry store_id. Amounts are stored in cents.
+        columns:
+          - name: id
+            description: primary key
+            data_tests:
+              - unique
+              - not_null
       - name: order_items
         description: Raw order line items, one row per item sold
         columns:

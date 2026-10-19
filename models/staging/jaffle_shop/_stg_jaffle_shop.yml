@@ -42,6 +42,13 @@ models:
           - not_null
       - name: order_id
         description: the order this item belongs to (UUID, not the integer order_id of stg_jaffle_shop__orders)
+      - name: location_id
+        description: the location the order was placed at, from jaffle_shop_raw.orders.store_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_jaffle_shop__locations')
+                field: location_id
       - name: product_id
         description: the product sku sold
 
